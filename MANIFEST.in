@@ -1,0 +1,7 @@
+include VERSION
+include Makefile
+include requirements.txt
+include virtualenv.py
+graft conf
+graft sbin
+

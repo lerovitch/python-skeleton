@@ -1,0 +1,86 @@
+#!/bin/bash
+#
+# Tracker    Start/Stop Tracker
+#
+# chkconfig: 345 90 15
+# description: Init script
+# processname: pythonskeleton
+#
+#
+
+# Source function library
+. /etc/init.d/functions
+NAME=pythonskeleton
+#Unprivilegeed user running app
+USER=$NAME
+#Home of the running daemon
+HOME=/opt/pythonskeleton
+COMPONENT_HOME=$HOME/lib/$USER
+#Servicename used as pidfile and lockfile name
+SERVICENAME=$NAME
+#script used to startup app
+RUNNER=$HOME/etc/init.d/$NAMErunner
+RUNNER_OPTS="-d $HOME -c $HOME/etc/$NAME/$NAME.conf -l $HOME/etc/$NAME/logging.conf"
+RUNNER_BIN="$HOME/bin/$NAME"
+pidfile=$HOME/var/run/$NAME/$NAME
+lockfile=$HOME/var/lock/$NAME/$NAME
+initlog_file=$HOME/var/log/$NAME/init_log
+
+command="$RUNNER $pidfile $initlog_file $RUNNER_BIN $RUNNER_OPTS"
+
+start() {
+    echo -n $"Starting $SERVICENAME: "
+    daemon --user $USER --pidfile=$pidfile $command start
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    echo
+}
+
+stop() {
+    echo -n "Stopping $SERVICENAME: "
+    if [ ! -r $pidfile ]; then
+        echo "Pidfile $pidfile cannot be read"
+        RETVAL=1
+        return
+    fi
+    # Sends TERM signal first and kills finally after 3 seconds
+    killproc -p $pidfile -d 3 $servicename
+
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && rm -f ${lockfile} ${pidfile}
+    echo
+}
+
+version() {
+    echo `$RUNNER_BIN --version`
+    RETVAL=$?
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+
+    stop)
+        stop
+        ;;
+
+    status)
+        status -p $pidfile $SERVICENAME
+        RETVAL=$?
+        ;;
+
+    version)
+        version
+        ;;
+
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|restart|version|status}"
+        RETVAL=1
+esac
+
+exit $RETVAL
