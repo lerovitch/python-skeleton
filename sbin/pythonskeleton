@@ -19,7 +19,7 @@ COMPONENT_HOME=$HOME/lib/$USER
 #Servicename used as pidfile and lockfile name
 SERVICENAME=$NAME
 #script used to startup app
-RUNNER=$HOME/etc/init.d/$NAMErunner
+RUNNER=$HOME/etc/init.d/${NAME}runner
 RUNNER_OPTS="-d $HOME -c $HOME/etc/$NAME/$NAME.conf -l $HOME/etc/$NAME/logging.conf"
 RUNNER_BIN="$HOME/bin/$NAME"
 pidfile=$HOME/var/run/$NAME/$NAME
