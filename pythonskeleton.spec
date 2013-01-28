@@ -1,5 +1,6 @@
 %define name pythonskeleton
 %define home /opt/pythonskeleton
+%{!?sitepackages_path: %global sitepackages_path %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")} 
 
 # disable building of the debug package
 %define  debug_package %{nil}
@@ -11,7 +12,7 @@
 %define libdir %{home}/lib/%{name}
 
 # do not know how to get site packages in a spec file
-%define sitepackages_path /usr/lib/python2.6/site-packages/
+#%define sitepackages_path /usr/lib/python2.6/site-packages/
 
 
 Summary: Python Skeleton Package
